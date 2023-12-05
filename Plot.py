@@ -17,7 +17,7 @@ class Plot:
     fig:        plt.Figure
     ax:         plt.Axes
     dir_path:   str | None
-    plotter:    Callable[[plt.Axes, ndarray, ndarray, str | None], None]
+    plotter:    Callable[[plt.Axes, ndarray, ndarray, str | None], str]
 
     # noinspection SpellCheckingInspection
     def __init__(self, title: str, xlabel: str, ylabel: str, dir_path: str | None):
@@ -32,18 +32,20 @@ class Plot:
 
         self.plotter = default_plotter
 
-    def plot(self, ch_x: ndarray, ch_y: ndarray, label: str = None):
-        self.plotter(self.ax, ch_x, ch_y, label=label)
+    def plot(self, ch_x: ndarray, ch_y: ndarray, label: str = None) -> str:
+        return self.plotter(self.ax, ch_x, ch_y, label=label)
 
-    def dashed_line(self, slope: float, intercept: float, anchor_x: float) -> None:
-        self.ax.axline((anchor_x, intercept + slope * anchor_x), slope=slope, ls='--')
+    def dashed_line(self, slope: float, intercept: float, anchor_x: float, *, color: str | None = None) -> None:
+        self.ax.axline((anchor_x, intercept + slope * anchor_x), slope=slope, ls='--', color=color)
 
     # noinspection SpellCheckingInspection
     def linregress(self, ch_x: np.ndarray, ch_y: np.ndarray, label: str = None) -> None:
+        color: str
+
         linregress_result = linregress(ch_x, ch_y)
 
-        self.plot(ch_x, ch_y, label)
-        self.dashed_line(linregress_result.slope, linregress_result.intercept, float(ch_x[0]))
+        color = self.plot(ch_x, ch_y, label)
+        self.dashed_line(linregress_result.slope, linregress_result.intercept, float(ch_x[0]), color=color)
         self.set_axes_title(util.get_equation(linregress_result))
 
     def set_axes_title(self, title: str) -> None:
