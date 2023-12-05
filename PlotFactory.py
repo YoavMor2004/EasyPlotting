@@ -12,8 +12,7 @@ class PlotFactory:
         self.axes = axes
 
     def set_axes(self, axes: bool) -> Self:
-        self.axes = axes
-        return self
+        return PlotFactory(self.dir_path, axes=axes)
 
     def get_plot(self, title: str, xlabel: str, ylabel: str) -> Plot:
         if self.axes:
