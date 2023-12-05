@@ -38,6 +38,12 @@ class Plot:
     def dashed_line(self, slope: float, intercept: float, anchor_x: float, *, color: str | None = None) -> None:
         self.ax.axline((anchor_x, intercept + slope * anchor_x), slope=slope, ls='--', color=color)
 
+    def draw_line(self, slope: float, intercept: float, anchor_x: float, *, color: str | None = None) -> None:
+        self.ax.axline((anchor_x, intercept + slope * anchor_x), slope=slope, color=color)
+
+    def draw_vertical_line(self, anchor_x: float, *, color: str | None = None) -> None:
+        self.ax.axvline(anchor_x, color=color)
+
     # noinspection SpellCheckingInspection
     def linregress(self, ch_x: np.ndarray, ch_y: np.ndarray, label: str = None) -> None:
         color: str
