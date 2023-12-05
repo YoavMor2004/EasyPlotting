@@ -58,6 +58,6 @@ class Plot:
             return
         self.fig.savefig(rf'{self.dir_path}\{path}')
 
-    def set_plotter(self, plotter: Callable[[plt.Axes, ndarray, ndarray, str | None], None]) -> Self:
+    def set_plotter(self, plotter: Callable[[plt.Axes, ndarray, ndarray, str | None], str]) -> Self:
         self.plotter = plotter
         return self
