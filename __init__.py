@@ -1,2 +1,2 @@
-from AxesPlot import *
-from Plot import *
+from EasyPlotting.AxesPlot import *
+from EasyPlotting.Plot import *

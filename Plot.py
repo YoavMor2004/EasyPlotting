@@ -9,7 +9,7 @@ AXES_TITLE_FONT_SIZE: int | None = None
 
 
 def default_plotter(ax: plt.Axes, ch_x: np.ndarray, ch_y: np.ndarray, label: str) -> None:
-    ax.scatter(ch_x, ch_y, label=label)
+    ax.plot(ch_x, ch_y, marker='o', ls='', label=label)
 
 
 class Plot:

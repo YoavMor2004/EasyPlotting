@@ -1,4 +1,4 @@
-from Plot import Plot
+from EasyPlotting.Plot import Plot
 
 
 class AxesPlot(Plot):
