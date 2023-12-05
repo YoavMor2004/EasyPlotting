@@ -5,11 +5,12 @@ import numpy as np
 from numpy import ndarray
 from scipy.stats import linregress
 
+from EasyPlotting import plotters
+
 AXES_TITLE_FONT_SIZE: int | None = None
 
 
-def default_plotter(ax: plt.Axes, ch_x: np.ndarray, ch_y: np.ndarray, label: str) -> None:
-    ax.plot(ch_x, ch_y, marker='.', ls='', label=label)
+default_plotter = plotters.small_scatter
 
 
 class Plot:
