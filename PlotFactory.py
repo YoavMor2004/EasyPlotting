@@ -7,7 +7,7 @@ class PlotFactory:
     dir_path: str
     axes: bool
 
-    def __init__(self, dir_path: str, axes: bool = False):
+    def __init__(self, dir_path: str, *, axes: bool = False):
         self.dir_path = dir_path
         self.axes = axes
 
