@@ -18,6 +18,7 @@ class PlotFactory:
     def cd(self, dir_path: str) -> PlotFactory:
         return PlotFactory(rf'{self.dir_path}\{dir_path}', axes=self.axes)
 
+    @deprecation.deprecated()
     def set_axes(self, axes: bool) -> Self:
         return PlotFactory(self.dir_path, axes=axes)
 
