@@ -22,7 +22,7 @@ class PlotFactory:
     def set_axes(self, axes: bool) -> Self:
         return PlotFactory(self.dir_path, axes=axes)
 
-    @deprecation.deprecated
+    @deprecation.deprecated()
     def get_plot(self, title: str, xlabel: str, ylabel: str) -> Plot:
         if self.axes:
             return AxesPlot(title, xlabel, ylabel, self.dir_path)
