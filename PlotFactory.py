@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from typing import Self
+
+import deprecation
+
 from EasyPlotting import Plot, AxesPlot
 
 
@@ -18,7 +21,14 @@ class PlotFactory:
     def set_axes(self, axes: bool) -> Self:
         return PlotFactory(self.dir_path, axes=axes)
 
+    @deprecation.deprecated
     def get_plot(self, title: str, xlabel: str, ylabel: str) -> Plot:
         if self.axes:
             return AxesPlot(title, xlabel, ylabel, self.dir_path)
         return Plot(title, xlabel, ylabel, self.dir_path)
+
+    def get(self, title: str, xlabel: str, ylabel: str) -> Plot:
+        return Plot(title, xlabel, ylabel, self.dir_path)
+
+    def get_axes_plot(self, title: str, xlabel: str, ylabel: str) -> AxesPlot:
+        return AxesPlot(title, xlabel, ylabel, self.dir_path)
