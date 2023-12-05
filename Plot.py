@@ -19,7 +19,7 @@ class Plot:
     plotter:    Callable[[plt.Axes, ndarray, ndarray, str | None], None]
 
     # noinspection SpellCheckingInspection
-    def __init__(self, title: str, xlabel: str, ylabel: str, dir_path: str | None = None):
+    def __init__(self, title: str, xlabel: str, ylabel: str, dir_path: str | None):
         self.fig, self.ax = plt.subplots()
         self.fig.tight_layout(rect=(0.1, 0.1, 1, 0.9))
         self.fig.suptitle(title)
