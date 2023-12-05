@@ -5,7 +5,7 @@ import numpy as np
 from numpy import ndarray
 from scipy.stats import linregress
 
-from EasyPlotting import plotters
+from EasyPlotting import plotters, util
 
 AXES_TITLE_FONT_SIZE: int | None = None
 
