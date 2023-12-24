@@ -15,14 +15,15 @@ default_plotter = plotters.small_scatter
 
 
 class Plot:
-    fig:        plt.Figure
-    ax:         plt.Axes
-    dir_path:   Optional[str]
-    plotter:    Callable[[plt.Axes, ndarray, ndarray, Optional[str], Optional[str]], str]
-    fit_curve:  Optional[Callable[[float | ndarray, ...], float | ndarray]]
-    curve_str:  Optional[str]
-    p0:         Optional[list[float]]
-    has_legend: bool
+    fig:                plt.Figure
+    ax:                 plt.Axes
+    dir_path:           Optional[str]
+    plotter:            Callable[[plt.Axes, ndarray, ndarray, Optional[str], Optional[str]], str]
+    fit_curve:          Optional[Callable[[float | ndarray, ...], float | ndarray]]
+    curve_str:          Optional[str]
+    p0:                 Optional[list[float]]
+    has_legend:         bool
+    legend_location:    Optional[int | str]
 
     # noinspection SpellCheckingInspection
     def __init__(self, title: str, xlabel: str, ylabel: str, dir_path: str | None):
@@ -41,6 +42,7 @@ class Plot:
         self.p0 = None
 
         self.has_legend = False
+        self.legend_location = None
 
     def plot(self, ch_x: ndarray, ch_y: ndarray, label: Optional[str] = None, color: Optional[str] = None) -> str:
         if label is not None:
@@ -54,12 +56,12 @@ class Plot:
                   label: Optional[str] = None, color: Optional[str] = None) -> None:
         if label is not None:
             self.has_legend = True
-        self.ax.axline((anchor_x, intercept + slope * anchor_x), slope=slope, color=color, label=label)
+        self.ax.axline((anchor_x, intercept + slope * anchor_x), slope=slope, ls='--', color=color, label=label)
 
     def draw_vertical_line(self, anchor_x: float, *, label: Optional[str] = None, color: Optional[str] = None) -> None:
         if label is not None:
             self.has_legend = True
-        self.ax.axvline(anchor_x, label=label, color=color)
+        self.ax.axvline(anchor_x, label=label, ls='--', color=color)
 
     def set_curve_fit(self, fit_curve: Callable[[float | ndarray, ...], float | ndarray], curve_str: str) -> Self:
         self.fit_curve = fit_curve
@@ -120,3 +122,8 @@ class Plot:
         color = self.plot(ch_x, ch_y, label, color)
         self.dashed_line(linregress_result.slope, linregress_result.intercept, float(ch_x[0]), color=color)
         self.set_axes_title(util.get_equation(linregress_result))
+
+    def set_legend_location(self, loc: int | str) -> Self:
+        self.legend_location = loc
+        self.has_legend = True
+        return self
