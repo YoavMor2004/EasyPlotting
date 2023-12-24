@@ -98,9 +98,14 @@ class Plot:
     def set_axes_title(self, title: str) -> None:
         self.ax.set_title(title)
 
+    def set_legend_location(self, loc: int | str) -> Self:
+        self.legend_location = loc
+        self.has_legend = True
+        return self
+
     def save_fig(self, path: str) -> None:
         if self.has_legend:
-            self.ax.legend()
+            self.ax.legend(loc=self.legend_location)
         if self.dir_path is None:
             self.fig.savefig(path)
             return
@@ -122,8 +127,3 @@ class Plot:
         color = self.plot(ch_x, ch_y, label, color)
         self.dashed_line(linregress_result.slope, linregress_result.intercept, float(ch_x[0]), color=color)
         self.set_axes_title(util.get_equation(linregress_result))
-
-    def set_legend_location(self, loc: int | str) -> Self:
-        self.legend_location = loc
-        self.has_legend = True
-        return self
