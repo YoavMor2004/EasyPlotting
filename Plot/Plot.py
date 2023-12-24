@@ -2,7 +2,6 @@ from typing import Callable, Self, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
-from deprecation import deprecated
 from numpy import ndarray
 from scipy.optimize import curve_fit
 from scipy.stats import linregress
