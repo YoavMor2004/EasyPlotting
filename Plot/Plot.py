@@ -21,6 +21,8 @@ class Plot:
     plotter:    Callable[[plt.Axes, ndarray, ndarray, Optional[str], Optional[str]], str]
     fit_curve:  Optional[Callable[[float | ndarray, ...], float | ndarray]]
     curve_str:  Optional[str]
+    p0:         Optional[list[float]]
+    has_legend: bool
 
     # noinspection SpellCheckingInspection
     def __init__(self, title: str, xlabel: str, ylabel: str, dir_path: str | None):
@@ -36,8 +38,13 @@ class Plot:
         self.plotter = default_plotter
         self.fit_curve = None
         self.curve_str = None
+        self.p0 = None
+
+        self.has_legend = False
 
     def plot(self, ch_x: ndarray, ch_y: ndarray, label: Optional[str] = None, color: Optional[str] = None) -> str:
+        if label is not None:
+            self.has_legend = True
         return self.plotter(self.ax, ch_x, ch_y, label, color)
 
     def dashed_line(self, slope: float, intercept: float, anchor_x: float, *, color: Optional[str] = None) -> None:
@@ -45,9 +52,13 @@ class Plot:
 
     def draw_line(self, slope: float, intercept: float, anchor_x: float, *,
                   label: Optional[str] = None, color: Optional[str] = None) -> None:
+        if label is not None:
+            self.has_legend = True
         self.ax.axline((anchor_x, intercept + slope * anchor_x), slope=slope, color=color, label=label)
 
     def draw_vertical_line(self, anchor_x: float, *, label: Optional[str] = None, color: Optional[str] = None) -> None:
+        if label is not None:
+            self.has_legend = True
         self.ax.axvline(anchor_x, label=label, color=color)
 
     def set_curve_fit(self, fit_curve: Callable[[float | ndarray, ...], float | ndarray], curve_str: str) -> Self:
@@ -60,20 +71,25 @@ class Plot:
         self.curve_str = None
         return self
 
+    def set_p0(self, p0: list[float]) -> Self:
+        self.p0 = p0
+        return self
+
     def curve_fit(self, ch_x: ndarray, ch_y: ndarray, label: Optional[str] = None) -> None:
         color: str
         parameter_values: list[float]
         prev_plotter: Callable[[plt.Axes, ndarray, ndarray, Optional[str], Optional[str]], str]
 
+        if label is not None:
+            self.has_legend = True
         if self.fit_curve is None:
             return self.linregress(ch_x, ch_y, label)
 
         prev_plotter = self.get_plotter()
         color = self.plot(ch_x, ch_y, label)
-        parameter_values = curve_fit(self.fit_curve, ch_x, ch_y, maxfev=int(10e6))[0]
-        print(parameter_values)
+        parameter_values = curve_fit(self.fit_curve, ch_x, ch_y, self.p0, maxfev=int(1e6))[0]
         ch_x = np.linspace(min(ch_x), max(ch_x), 1000)
-        self.set_plotter(plotters.dashed_line_plot).plot(ch_x, self.fit_curve(ch_x, *parameter_values), label, color)
+        self.set_plotter(plotters.dashed_line_plot).plot(ch_x, self.fit_curve(ch_x, *parameter_values), color=color)
         self.set_axes_title(self.curve_str.format(*parameter_values))
         self.set_plotter(prev_plotter)
 
@@ -82,7 +98,8 @@ class Plot:
         self.ax.set_title(title)
 
     def save_fig(self, path: str) -> None:
-        self.ax.legend()
+        if self.has_legend:
+            self.ax.legend()
         if self.dir_path is None:
             self.fig.savefig(path)
             return
@@ -99,6 +116,8 @@ class Plot:
     def linregress(self, ch_x: np.ndarray, ch_y: np.ndarray, label: str = None) -> None:
         color: str
 
+        if label is not None:
+            self.has_legend = True
         linregress_result = linregress(ch_x, ch_y)
 
         color = self.plot(ch_x, ch_y, label)
