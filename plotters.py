@@ -18,3 +18,7 @@ def line_plot(ax: plt.Axes, ch_x: np.ndarray, ch_y: np.ndarray, label: str | Non
 
 def dashed_line_plot(ax: plt.Axes, ch_x: np.ndarray, ch_y: np.ndarray, label: str | None, color: Optional[str]) -> str:
     return ax.plot(ch_x, ch_y, ls='--', label=label, color=color)[0].get_color()
+
+
+def null_plot(ax: plt.Axes, ch_x: np.ndarray, ch_y: np.ndarray, label: str | None, color: Optional[str]) -> str:
+    return 'k'
