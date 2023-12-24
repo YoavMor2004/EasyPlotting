@@ -75,18 +75,17 @@ class Plot:
         self.p0 = p0
         return self
 
-    def curve_fit(self, ch_x: ndarray, ch_y: ndarray, label: Optional[str] = None) -> None:
-        color: str
+    def curve_fit(self, ch_x: ndarray, ch_y: ndarray, label: Optional[str] = None, color: Optional[str] = None) -> None:
         parameter_values: list[float]
         prev_plotter: Callable[[plt.Axes, ndarray, ndarray, Optional[str], Optional[str]], str]
 
         if label is not None:
             self.has_legend = True
         if self.fit_curve is None:
-            return self.linregress(ch_x, ch_y, label)
+            return self.linregress(ch_x, ch_y, label, color)
 
         prev_plotter = self.get_plotter()
-        color = self.plot(ch_x, ch_y, label)
+        color = self.plot(ch_x, ch_y, label, color)
         parameter_values = curve_fit(self.fit_curve, ch_x, ch_y, self.p0, maxfev=int(1e6))[0]
         ch_x = np.linspace(min(ch_x), max(ch_x), 1000)
         self.set_plotter(plotters.dashed_line_plot).plot(ch_x, self.fit_curve(ch_x, *parameter_values), color=color)
@@ -113,13 +112,11 @@ class Plot:
         return self
 
     # noinspection SpellCheckingInspection
-    def linregress(self, ch_x: np.ndarray, ch_y: np.ndarray, label: str = None) -> None:
-        color: str
-
+    def linregress(self, ch_x: np.ndarray, ch_y: np.ndarray, label: str = None, color: Optional[str] = None) -> None:
         if label is not None:
             self.has_legend = True
         linregress_result = linregress(ch_x, ch_y)
 
-        color = self.plot(ch_x, ch_y, label)
+        color = self.plot(ch_x, ch_y, label, color)
         self.dashed_line(linregress_result.slope, linregress_result.intercept, float(ch_x[0]), color=color)
         self.set_axes_title(util.get_equation(linregress_result))

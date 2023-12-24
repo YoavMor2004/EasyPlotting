@@ -21,4 +21,6 @@ def dashed_line_plot(ax: plt.Axes, ch_x: np.ndarray, ch_y: np.ndarray, label: st
 
 
 def null_plot(ax: plt.Axes, ch_x: np.ndarray, ch_y: np.ndarray, label: str | None, color: Optional[str]) -> str:
-    return 'k'
+    if color is None:
+        return 'k'
+    return color
