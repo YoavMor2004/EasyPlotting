@@ -70,7 +70,8 @@ class Plot:
 
         prev_plotter = self.get_plotter()
         color = self.plot(ch_x, ch_y, label)
-        parameter_values = curve_fit(self.fit_curve, ch_x, ch_y)[0]
+        parameter_values = curve_fit(self.fit_curve, ch_x, ch_y, maxfev=int(10e6))[0]
+        print(parameter_values)
         ch_x = np.linspace(min(ch_x), max(ch_x), 1000)
         self.set_plotter(plotters.dashed_line_plot).plot(ch_x, self.fit_curve(ch_x, *parameter_values), label, color)
         self.set_axes_title(self.curve_str.format(*parameter_values))
